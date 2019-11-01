@@ -17,4 +17,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+.rows {
+    
+    width: 700px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+}
+.rows__key {
+    width: 40px;
+    height: 40px;
+    background-color: #3a424e;
 }
