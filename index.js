@@ -106,42 +106,84 @@ let keyClass = (key, name) => {
     }
 }
 let flag;
-let keybLang = () => {
+let flag1;
+let keybLangEn = () => {
     keyName(keyboardArr1, textEngl[0]);
     keyName(keyboardArr2, textEngl[1]);
     keyName(keyboardArr3, textEngl[2]);
     keyName(keyboardArr4, textEngl[3]);
     keyName(keyboardArr5, textEngl[4]);
     flag = true;
+    flag1 = true;
 }
 
-keybLang();
+keybLangEn();
+
+let keybLangRu = () => {
+    keyName(keyboardArr1, textRus[0]);
+    keyName(keyboardArr2, textRus[1]);
+    keyName(keyboardArr3, textRus[2]);
+    keyName(keyboardArr4, textRus[3]);
+    keyName(keyboardArr5, textRus[4]);
+    flag = false;
+    flag1 = true;
+}
 
 let chengeLang = () => {
     if(flag == true) {
-        keyName(keyboardArr1, textRus[0]);
-        keyName(keyboardArr2, textRus[1]);
-        keyName(keyboardArr3, textRus[2]);
-        keyName(keyboardArr4, textRus[3]);
-        keyName(keyboardArr5, textRus[4]);
-        flag = false;
+        keybLangRu();
     } else {
-        keyName(keyboardArr1, textEngl[0]);
-        keyName(keyboardArr2, textEngl[1]);
-        keyName(keyboardArr3, textEngl[2]);
-        keyName(keyboardArr4, textEngl[3]);
-        keyName(keyboardArr5, textEngl[4]);
-        flag = true;
+        keybLangEn();
     }
 }
 
+let keybLangEnBig = () => {
+    keyName(keyboardArr1, textEnglBig[0]);
+    keyName(keyboardArr2, textEnglBig[1]);
+    keyName(keyboardArr3, textEnglBig[2]);
+    keyName(keyboardArr4, textEnglBig[3]);
+    keyName(keyboardArr5, textEnglBig[4]);
+    flag1 = false;
+}
+
+let keybLangRuBig = () => {
+    keyName(keyboardArr1, textRusBig[0]);
+    keyName(keyboardArr2, textRusBig[1]);
+    keyName(keyboardArr3, textRusBig[2]);
+    keyName(keyboardArr4, textRusBig[3]);
+    keyName(keyboardArr5, textRusBig[4]);
+    flag1 = false;
+}
+
 document.addEventListener('keydown', (event) => {
-    console.log(event);
+   
     if(event.key === 'Alt' && event.shiftKey === true || event.key === 'Shift' && event.altKey === true){
         chengeLang();
     }
 });
 
+let chengeEnBig = (e) => {
+    if(e.key === "Shift"){
+        if(flag === true && flag1 === true){
+            keybLangEnBig();
+        } else if(flag === false && flag1 === true){
+            keybLangRuBig();
+        }
+
+    }
+}
+let chengeEnSmall = (e) => {
+    if(e.key === "Shift"){
+        if(flag === true && flag1 === false){
+            keybLangEn();
+        } else if(flag === false && flag1 === false){
+            keybLangRu();
+        }
+    }
+}
+
+document.addEventListener('keydown', chengeEnBig);
+document.addEventListener('keyup', chengeEnSmall);
 
 keyClass(keyboardArr1, clNameElem[0]);
 keyClass(keyboardArr2, clNameElem[1]);
@@ -153,7 +195,7 @@ const keyboardArray = [keyboardArr1,keyboardArr2,keyboardArr3,keyboardArr4,keybo
 
 
 document.addEventListener('keydown', (event) => {
-
+    console.log(event);
     for( let i = 0; i < keyboardArray.length; i++){
         for( let j = 0; j < keyboardArray[i].length; j++){
             if(`rows__key ${event.key}` === (keyboardArray[i][j]).className || `rows__key ${event.code}` === (keyboardArray[i][j]).className) {
@@ -169,10 +211,9 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
-
     for( let i = 0; i < keyboardArray.length; i++){
         for( let j = 0; j < keyboardArray[i].length; j++){
-            if(`rows__key ${event.key}` === (keyboardArray[i][j]).className || `rows__key ${event.code}` === (keyboardArray[i][j]).className) {
+            if(`rows__key ${event.key}` === (keyboardArray[i][j]).className && `rows__key ${event.key}` !== (keyboardArray[2][0]).className || `rows__key ${event.code}` === (keyboardArray[i][j]).className && `rows__key ${event.key}` !== (keyboardArray[2][0]).className) {
                 (keyboardArray[i][j]).style.opacity = '';
                 (keyboardArray[i][j]).style.borderRadius = '';
                 (keyboardArray[i][j]).style.opacity = '';
@@ -180,34 +221,58 @@ document.addEventListener('keyup', (event) => {
             }
         }
     }
-
+    
 });
+console.log(keyboardArray[2][0]);
 
+let chengeEnBig1 = (e) => {
+    if(e.key === "CapsLock"){
+        if(flag === true && flag1 === true){
+            keybLangEnBig();
+            (keyboardArray[2][0]).style.opacity = 0.5;
+            (keyboardArray[2][0]).style.borderRadius = '30%';
+        } else if(flag === false && flag1 === true){
+            keybLangRuBig();
+            (keyboardArray[2][0]).style.opacity = 0.5;
+            (keyboardArray[2][0]).style.borderRadius = '30%';
+        } else if(flag === true && flag1 === false){
+            keybLangEn();
+            (keyboardArray[2][0]).style.opacity = '';
+            (keyboardArray[2][0]).style.borderRadius = '';
+        } else if(flag === false && flag1 === false){
+            keybLangRu();
+            (keyboardArray[2][0]).style.opacity = '';
+            (keyboardArray[2][0]).style.borderRadius = '';
+        }
+
+    }
+}
+
+document.addEventListener('keydown', chengeEnBig1);
 
 
         
 
-        //   document.onkeypress = (e) => {
-        //     console.log(e);
-        //     if (/[a-zA-Z]/.test(e.key)){
+          document.onkeypress = (e) => {
+            console.log(e);
+            if (/[a-zA-Z]/.test(e.key)){
                 
-        //         keyName(keyboardArr1, textEngl[0]);
-        //         keyName(keyboardArr2, textEngl[1]);
-        //         keyName(keyboardArr3, textEngl[2]);
-        //         keyName(keyboardArr4, textEngl[3]);
-        //         keyName(keyboardArr5, textEngl[4]);
-        //     } else {
-        //         keyName(keyboardArr1, textRus[0]);
-        //         keyName(keyboardArr2, textRus[1]);
-        //         keyName(keyboardArr3, textRus[2]);
-        //         keyName(keyboardArr4, textRus[3]);
-        //         keyName(keyboardArr5, textRus[4]);
-        //     }
-        // }
+                keyName(keyboardArr1, textEngl[0]);
+                keyName(keyboardArr2, textEngl[1]);
+                keyName(keyboardArr3, textEngl[2]);
+                keyName(keyboardArr4, textEngl[3]);
+                keyName(keyboardArr5, textEngl[4]);
+            } else {
+                keyName(keyboardArr1, textRus[0]);
+                keyName(keyboardArr2, textRus[1]);
+                keyName(keyboardArr3, textRus[2]);
+                keyName(keyboardArr4, textRus[3]);
+                keyName(keyboardArr5, textRus[4]);
+            }
+        }
 
 
           
-
 
 
 
