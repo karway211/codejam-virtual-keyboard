@@ -1,10 +1,11 @@
 const body = document.getElementsByTagName('body')[0],
-    root = document.createElement('div');
-    root.id = 'root';
-    body.appendChild(root); 
+root = document.createElement('div');
+root.id = 'root';
+body.appendChild(root); 
 
 const textarea = document.createElement('textarea');
 const keyboard = document.createElement('div');
+let flagCl = false;
 
 textarea.name = 'text';
 textarea.rows = '20';
@@ -105,16 +106,16 @@ let keyClass = (key, name) => {
         }
     }
 }
-let flag;
-let flag1;
+let flagEng = true;
+let flagSmall = false;
 let keybLangEn = () => {
     keyName(keyboardArr1, textEngl[0]);
     keyName(keyboardArr2, textEngl[1]);
     keyName(keyboardArr3, textEngl[2]);
     keyName(keyboardArr4, textEngl[3]);
     keyName(keyboardArr5, textEngl[4]);
-    flag = true;
-    flag1 = true;
+    flagEng = true;
+    flagSmall = true;
 }
 
 keybLangEn();
@@ -125,16 +126,8 @@ let keybLangRu = () => {
     keyName(keyboardArr3, textRus[2]);
     keyName(keyboardArr4, textRus[3]);
     keyName(keyboardArr5, textRus[4]);
-    flag = false;
-    flag1 = true;
-}
-
-let chengeLang = () => {
-    if(flag == true) {
-        keybLangRu();
-    } else {
-        keybLangEn();
-    }
+    flagEng = false;
+    flagSmall = true;
 }
 
 let keybLangEnBig = () => {
@@ -143,7 +136,8 @@ let keybLangEnBig = () => {
     keyName(keyboardArr3, textEnglBig[2]);
     keyName(keyboardArr4, textEnglBig[3]);
     keyName(keyboardArr5, textEnglBig[4]);
-    flag1 = false;
+    flagSmall = false;
+    flagEng = true;
 }
 
 let keybLangRuBig = () => {
@@ -152,38 +146,32 @@ let keybLangRuBig = () => {
     keyName(keyboardArr3, textRusBig[2]);
     keyName(keyboardArr4, textRusBig[3]);
     keyName(keyboardArr5, textRusBig[4]);
-    flag1 = false;
+    flagSmall = false;
+    flagEng = false;
+}
+
+let chengeLang = () => {
+    if(flagEng === true) {
+        if(flagCl === false){
+            keybLangRu();
+        } else {
+            keybLangRuBig();
+        }
+    } else {
+        if(flagCl === false){
+            keybLangEn();
+        } else {
+            keybLangEnBig();
+        }
+    }
 }
 
 document.addEventListener('keydown', (event) => {
-   
+    
     if(event.key === 'Alt' && event.shiftKey === true || event.key === 'Shift' && event.altKey === true){
         chengeLang();
     }
 });
-
-let chengeEnBig = (e) => {
-    if(e.key === "Shift"){
-        if(flag === true && flag1 === true){
-            keybLangEnBig();
-        } else if(flag === false && flag1 === true){
-            keybLangRuBig();
-        }
-
-    }
-}
-let chengeEnSmall = (e) => {
-    if(e.key === "Shift"){
-        if(flag === true && flag1 === false){
-            keybLangEn();
-        } else if(flag === false && flag1 === false){
-            keybLangRu();
-        }
-    }
-}
-
-document.addEventListener('keydown', chengeEnBig);
-document.addEventListener('keyup', chengeEnSmall);
 
 keyClass(keyboardArr1, clNameElem[0]);
 keyClass(keyboardArr2, clNameElem[1]);
@@ -194,20 +182,19 @@ keyClass(keyboardArr5, clNameElem[4]);
 const keyboardArray = [keyboardArr1,keyboardArr2,keyboardArr3,keyboardArr4,keyboardArr5];
 
 
+
 document.addEventListener('keydown', (event) => {
-    console.log(event);
     for( let i = 0; i < keyboardArray.length; i++){
         for( let j = 0; j < keyboardArray[i].length; j++){
             if(`rows__key ${event.key}` === (keyboardArray[i][j]).className || `rows__key ${event.code}` === (keyboardArray[i][j]).className) {
+                // console.log(event);
                 (keyboardArray[i][j]).style.opacity = 0.5;
                 (keyboardArray[i][j]).style.borderRadius = '30%';
                 (keyboardArray[i][j]).style.opacity = 0.5;
                 (keyboardArray[i][j]).style.borderRadius = '30%';
             }
         }
-    }
-    
-
+    }  
 });
 
 document.addEventListener('keyup', (event) => {
@@ -220,61 +207,118 @@ document.addEventListener('keyup', (event) => {
                 (keyboardArray[i][j]).style.borderRadius = '';
             }
         }
-    }
-    
+    }    
 });
-console.log(keyboardArray[2][0]);
 
-let chengeEnBig1 = (e) => {
-    if(e.key === "CapsLock"){
-        if(flag === true && flag1 === true){
-            keybLangEnBig();
-            (keyboardArray[2][0]).style.opacity = 0.5;
-            (keyboardArray[2][0]).style.borderRadius = '30%';
-        } else if(flag === false && flag1 === true){
-            keybLangRuBig();
-            (keyboardArray[2][0]).style.opacity = 0.5;
-            (keyboardArray[2][0]).style.borderRadius = '30%';
-        } else if(flag === true && flag1 === false){
-            keybLangEn();
-            (keyboardArray[2][0]).style.opacity = '';
-            (keyboardArray[2][0]).style.borderRadius = '';
-        } else if(flag === false && flag1 === false){
-            keybLangRu();
-            (keyboardArray[2][0]).style.opacity = '';
-            (keyboardArray[2][0]).style.borderRadius = '';
-        }
+//  CapsLock
+const CapsLock = keyboardArray[2][0];
 
+let CapsLockOnOff = () => {
+    if(flagEng === true && flagSmall === true){
+        keybLangEnBig();
+        CapsLock.style.opacity = 0.5;
+        CapsLock.style.borderRadius = '30%';
+        flagCl = true;
+    } else if(flagEng === false && flagSmall === true){
+        keybLangRuBig();
+        CapsLock.style.opacity = 0.5;
+        CapsLock.style.borderRadius = '30%';
+        flagCl = true;
+    } else if(flagEng === true && flagSmall === false){
+        keybLangEn();
+        CapsLock.style.opacity = '';
+        CapsLock.style.borderRadius = '';
+        flagCl = false;
+    } else if(flagEng === false && flagSmall === false){
+        keybLangRu();
+        CapsLock.style.opacity = '';
+        CapsLock.style.borderRadius = '';
+        flagCl = false;
     }
 }
 
-document.addEventListener('keydown', chengeEnBig1);
-
-
-        
-
-          document.onkeypress = (e) => {
-            console.log(e);
-            if (/[a-zA-Z]/.test(e.key)){
-                
-                keyName(keyboardArr1, textEngl[0]);
-                keyName(keyboardArr2, textEngl[1]);
-                keyName(keyboardArr3, textEngl[2]);
-                keyName(keyboardArr4, textEngl[3]);
-                keyName(keyboardArr5, textEngl[4]);
-            } else {
-                keyName(keyboardArr1, textRus[0]);
-                keyName(keyboardArr2, textRus[1]);
-                keyName(keyboardArr3, textRus[2]);
-                keyName(keyboardArr4, textRus[3]);
-                keyName(keyboardArr5, textRus[4]);
+let chengeEnBig = (e) => {
+    if(e.key === "Shift"){
+        if(flagCl === false){
+            if(flagEng === true){
+                keybLangEnBig();
+            } else if(flagEng === false){
+                keybLangRuBig();
+            }
+        } else {
+            if(flagEng === true){
+                keybLangEn();
+            } else if(flagEng === false){
+                keybLangRu();
             }
         }
+        
+    }
+}
+
+let chengeEnSmall = (e) => {
+    if(e.key === "Shift"){
+        if(flagCl === false){
+            if(flagEng === true && flagSmall === false){
+                keybLangEn();
+            } else if(flagEng === false && flagSmall === false){
+                keybLangRu();
+            }
+        } else {
+            if(flagEng === true){
+                keybLangEnBig();
+            } else if(flagEng === false){
+                keybLangRuBig();
+            }
+        }
+    }
+}
+CapsLock.addEventListener('click', CapsLockOnOff);
+document.addEventListener('keydown', chengeEnBig);
+document.addEventListener('keyup', chengeEnSmall);
+
+document.addEventListener('keydown', (e) => {
+    console.log(e);
+    if(e.key === "CapsLock"){
+        CapsLockOnOff();
+    }
+});
+
+// Click
+
+for(let i = 0; i< keyboardArray.length; i++){
+    for(let j = 0; j< keyboardArray[i].length; j++){
+        let clickDiv =  () => {          
+            (keyboardArray[i][j]).style.opacity = 0.5;
+            (keyboardArray[i][j]).style.borderRadius = '30%';
+            // if(!(keyboardArray[2][0]) || !(keyboardArray[0][13]) || !(keyboardArray[1][14]) || !(keyboardArray[2][10]) || !(keyboardArray[2][12]) || !(keyboardArray[3][0]) || !(keyboardArray[3][11]) || !(keyboardArray[3][12]) || !(keyboardArray[4][0]) || !(keyboardArray[4][1]) || !(keyboardArray[4][2]) || !(keyboardArray[4][4]) || !(keyboardArray[4][5]) || !(keyboardArray[4][6]) || !(keyboardArray[4][7]) || !(keyboardArray[4][8])){
+                textarea.append((keyboardArray[i][j]).innerHTML);
+
+            // }    
+        }
+        keyboardArray[i][j].addEventListener('mousedown', clickDiv);
+        let onClickDiv =  () => {
+            
+            (keyboardArray[i][j]).style.opacity = '';
+            (keyboardArray[i][j]).style.borderRadius = '';
+        }
+        keyboardArray[i][j].addEventListener('mouseup', onClickDiv);
+    }
+}
 
 
-          
 
 
 
-
-
+//     document.onclick = (e) => {
+//         console.log(e);
+//         if(e.target.innerText === 'Tab'){
+//             textarea.append('  ');
+//         }
+//     }
+//     document.onclick = (e) => {
+//                     console.log(e);
+                    
+//                         // textarea.append(e.target.innerText);
+                    
+//                 }
