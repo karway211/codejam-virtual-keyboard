@@ -61,5 +61,6 @@ body {
 
 .rows__key:hover {
   background-color: #000;
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */

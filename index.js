@@ -291,10 +291,10 @@ for(let i = 0; i< keyboardArray.length; i++){
         let clickDiv =  () => {          
             (keyboardArray[i][j]).style.opacity = 0.5;
             (keyboardArray[i][j]).style.borderRadius = '30%';
-            // if(!(keyboardArray[2][0]) || !(keyboardArray[0][13]) || !(keyboardArray[1][14]) || !(keyboardArray[2][10]) || !(keyboardArray[2][12]) || !(keyboardArray[3][0]) || !(keyboardArray[3][11]) || !(keyboardArray[3][12]) || !(keyboardArray[4][0]) || !(keyboardArray[4][1]) || !(keyboardArray[4][2]) || !(keyboardArray[4][4]) || !(keyboardArray[4][5]) || !(keyboardArray[4][6]) || !(keyboardArray[4][7]) || !(keyboardArray[4][8])){
-                textarea.append((keyboardArray[i][j]).innerHTML);
-
-            // }    
+            if(((keyboardArray[i][j]).innerHTML).length<2) {
+                textarea.value += (keyboardArray[i][j]).innerHTML;
+                console.log(textarea.value);
+            }  
         }
         keyboardArray[i][j].addEventListener('mousedown', clickDiv);
         let onClickDiv =  () => {
@@ -306,19 +306,16 @@ for(let i = 0; i< keyboardArray.length; i++){
     }
 }
 
+(keyboardArray[0][13]).addEventListener('mousedown', () => {
+        textarea.value = (textarea.value).slice(0, -1);
+});
+(keyboardArray[1][0]).addEventListener('mousedown', () =>{
+        textarea.value += '  ';
+});
+(keyboardArray[4][3]).addEventListener('mousedown', () =>{
+    textarea.value += ' ';
+});
+(keyboardArray[2][12]).addEventListener('mousedown', () =>{
+    textarea.value += '\r\n';
+});
 
-
-
-
-//     document.onclick = (e) => {
-//         console.log(e);
-//         if(e.target.innerText === 'Tab'){
-//             textarea.append('  ');
-//         }
-//     }
-//     document.onclick = (e) => {
-//                     console.log(e);
-                    
-//                         // textarea.append(e.target.innerText);
-                    
-//                 }
