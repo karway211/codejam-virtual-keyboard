@@ -20,6 +20,10 @@ body {
     flex-direction: column;
 }
 
+.textarea {
+    font-size: 32px;
+}
+
 .rows {
     
     width: 700px;
@@ -39,7 +43,6 @@ body {
     border-radius: 5px;
 }
 .rows__key:hover {
-    // border-radius: 50%;
     background-color: #000;
     cursor: pointer;
 }

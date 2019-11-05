@@ -30,6 +30,10 @@ body {
           flex-direction: column;
 }
 
+.textarea {
+  font-size: 32px;
+}
+
 .rows {
   width: 700px;
   height: 40px;

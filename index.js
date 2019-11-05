@@ -8,16 +8,19 @@ const keyboard = document.createElement('div');
 let flagCl = false;
 
 textarea.name = 'text';
-textarea.rows = '20';
-textarea.cols = '130';
+textarea.rows = '10';
+textarea.cols = '60';
+textarea.classList.add('textarea');
 root.append(textarea, keyboard);
+let resInp;
+
 
 function createDiv(nClass, n) {
     let result = [];
     for(let i=0; i<n; i++) {
-      let div = document.createElement('div');
-    div.classList.add(nClass);
-      result.push(div);
+        let div = document.createElement('div');
+        div.classList.add(nClass);
+        result.push(div);
     }
     return result;
 }
@@ -25,17 +28,27 @@ function createDiv(nClass, n) {
 keyboard.append(...createDiv('rows', 5));
 const keyboardArr = keyboard.getElementsByClassName('rows');
 
+
 keyboardArr[0].append(...createDiv('rows__key', 14));
 keyboardArr[1].append(...createDiv('rows__key', 15));
 keyboardArr[2].append(...createDiv('rows__key', 13));
 keyboardArr[3].append(...createDiv('rows__key', 13));
 keyboardArr[4].append(...createDiv('rows__key', 9));
 
-keyboardArr1 = keyboardArr[0].getElementsByClassName('rows__key');
-keyboardArr2 = keyboardArr[1].getElementsByClassName('rows__key');
-keyboardArr3 = keyboardArr[2].getElementsByClassName('rows__key');
-keyboardArr4 = keyboardArr[3].getElementsByClassName('rows__key');
-keyboardArr5 = keyboardArr[4].getElementsByClassName('rows__key');
+keyboardCol1 = keyboardArr[0].getElementsByClassName('rows__key');
+keyboardCol2 = keyboardArr[1].getElementsByClassName('rows__key');
+keyboardCol3 = keyboardArr[2].getElementsByClassName('rows__key');
+keyboardCol4 = keyboardArr[3].getElementsByClassName('rows__key');
+keyboardCol5 = keyboardArr[4].getElementsByClassName('rows__key');
+
+keyboardArr1 = [].slice.call(keyboardCol1);
+keyboardArr2 = [].slice.call(keyboardCol2);
+keyboardArr3 = [].slice.call(keyboardCol3);
+keyboardArr4 = [].slice.call(keyboardCol4);
+keyboardArr5 = [].slice.call(keyboardCol5);
+
+console.log(keyboardArr5);
+
 keyboardArr1[13].style.width = '100px';
 keyboardArr2[14].style.width = '45px';
 keyboardArr2[0].style.width = '50px';
@@ -45,6 +58,12 @@ keyboardArr4[0].style.width = '100px';
 keyboardArr4[12].style.width = '85px';
 keyboardArr5[3].style.width = '330px';
 
+
+let strLocal = localStorage.getItem("str");
+if(strLocal){
+    textarea.value = strLocal;
+}
+// localStorage.clear();
 
 let textEngl = [
     ['&acute;','1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '&#45;', '&#61;', 'Backspace'],
@@ -83,28 +102,27 @@ let clNameElem = [
     ['Tab','KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash', 'Delete'],
     ['CapsLock','KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote', 'Enter'],
     ['Shift','KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Shift'],
-    ['Control','MetaLeft', 'Alt', 'Space', 'AltGraph', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'Control']
+    ['Control','MetaLeft', 'Alt', 'Space', 'Alt', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'Control']
 ]
 
 
 let keyName = (key, name) => {
-    for( let i = 0; i < key.length; i++){
-        for( let j = 0; j < name.length; j++){
-            if(i == j){
-                (key[i]).innerHTML = name[j];
+    key.forEach((elem, item) => {
+        name.forEach((el, it) => {
+            if(item == it){
+                elem.innerHTML = el;
             }
-        }
-    }
+        })
+    })
 }
-
 let keyClass = (key, name) => {
-    for( let i = 0; i < key.length; i++){
-        for( let j = 0; j < name.length; j++){
-            if(i == j){
-                (key[i]).classList.add(name[j]);
+    key.forEach((elem, item) => {
+        name.forEach((el, it) => {
+            if(item == it){
+                (elem).classList.add(el);
             }
-        }
-    }
+        })
+    })
 }
 let flagEng = true;
 let flagSmall = false;
@@ -146,6 +164,7 @@ let keybLangRuBig = () => {
     keyName(keyboardArr3, textRusBig[2]);
     keyName(keyboardArr4, textRusBig[3]);
     keyName(keyboardArr5, textRusBig[4]);
+
     flagSmall = false;
     flagEng = false;
 }
@@ -166,9 +185,11 @@ let chengeLang = () => {
     }
 }
 
+const keyboardArray = [keyboardArr1,keyboardArr2,keyboardArr3,keyboardArr4,keyboardArr5];
+console.log(keyboardArray);
+
 document.addEventListener('keydown', (event) => {
-    
-    if(event.key === 'Alt' && event.shiftKey === true || event.key === 'Shift' && event.altKey === true){
+    if(event.key === 'Alt' && event.ctrlKey === true || event.key === 'Control' && event.altKey === true){
         chengeLang();
     }
 });
@@ -178,37 +199,6 @@ keyClass(keyboardArr2, clNameElem[1]);
 keyClass(keyboardArr3, clNameElem[2]);
 keyClass(keyboardArr4, clNameElem[3]);
 keyClass(keyboardArr5, clNameElem[4]);
-
-const keyboardArray = [keyboardArr1,keyboardArr2,keyboardArr3,keyboardArr4,keyboardArr5];
-
-
-
-document.addEventListener('keydown', (event) => {
-    for( let i = 0; i < keyboardArray.length; i++){
-        for( let j = 0; j < keyboardArray[i].length; j++){
-            if(`rows__key ${event.key}` === (keyboardArray[i][j]).className || `rows__key ${event.code}` === (keyboardArray[i][j]).className) {
-                // console.log(event);
-                (keyboardArray[i][j]).style.opacity = 0.5;
-                (keyboardArray[i][j]).style.borderRadius = '30%';
-                (keyboardArray[i][j]).style.opacity = 0.5;
-                (keyboardArray[i][j]).style.borderRadius = '30%';
-            }
-        }
-    }  
-});
-
-document.addEventListener('keyup', (event) => {
-    for( let i = 0; i < keyboardArray.length; i++){
-        for( let j = 0; j < keyboardArray[i].length; j++){
-            if(`rows__key ${event.key}` === (keyboardArray[i][j]).className && `rows__key ${event.key}` !== (keyboardArray[2][0]).className || `rows__key ${event.code}` === (keyboardArray[i][j]).className && `rows__key ${event.key}` !== (keyboardArray[2][0]).className) {
-                (keyboardArray[i][j]).style.opacity = '';
-                (keyboardArray[i][j]).style.borderRadius = '';
-                (keyboardArray[i][j]).style.opacity = '';
-                (keyboardArray[i][j]).style.borderRadius = '';
-            }
-        }
-    }    
-});
 
 //  CapsLock
 const CapsLock = keyboardArray[2][0];
@@ -277,45 +267,133 @@ CapsLock.addEventListener('click', CapsLockOnOff);
 document.addEventListener('keydown', chengeEnBig);
 document.addEventListener('keyup', chengeEnSmall);
 
-document.addEventListener('keydown', (e) => {
-    console.log(e);
-    if(e.key === "CapsLock"){
-        CapsLockOnOff();
-    }
-});
 
 // Click
 
-for(let i = 0; i< keyboardArray.length; i++){
-    for(let j = 0; j< keyboardArray[i].length; j++){
-        let clickDiv =  () => {          
-            (keyboardArray[i][j]).style.opacity = 0.5;
-            (keyboardArray[i][j]).style.borderRadius = '30%';
-            if(((keyboardArray[i][j]).innerHTML).length<2) {
-                textarea.value += (keyboardArray[i][j]).innerHTML;
-                console.log(textarea.value);
-            }  
+keyboardArray.forEach(elem => {
+    elem.forEach(item =>{
+        let clickDiv =  () => {       
+            item.style.opacity = 0.5;
+            item.style.borderRadius = '30%';
+            if((item.innerHTML).length<2) {
+                    textarea.value += item.innerHTML;
+                    localStorage.setItem("str", textarea.value);
+                }  
         }
-        keyboardArray[i][j].addEventListener('mousedown', clickDiv);
+        item.addEventListener('mousedown', clickDiv);
         let onClickDiv =  () => {
             
-            (keyboardArray[i][j]).style.opacity = '';
-            (keyboardArray[i][j]).style.borderRadius = '';
+            item.style.opacity = '';
+            item.style.borderRadius = '';
         }
-        keyboardArray[i][j].addEventListener('mouseup', onClickDiv);
+        item.addEventListener('mouseup', onClickDiv);
+    });
+});
+
+(keyboardArray[0][13]).addEventListener('mousedown', () => {
+    textarea.value = (textarea.value).slice(0, -1);
+    localStorage.setItem("str", textarea.value);
+    });
+    (keyboardArray[1][0]).addEventListener('mousedown', () =>{
+        textarea.value += '\u0009';
+        localStorage.setItem("str", textarea.value);
+    });
+    (keyboardArray[4][3]).addEventListener('mousedown', () =>{
+    textarea.value += '\u0020';
+    localStorage.setItem("str", textarea.value);
+});
+
+(keyboardArray[2][12]).addEventListener('mousedown', () =>{
+    textarea.value += '\r\n';
+    localStorage.setItem("str", textarea.value);
+});
+
+let shiftDown = () =>{
+    if(flagCl === false){
+        if(flagEng === true){
+            keybLangEnBig();
+        } else if(flagEng === false){
+            keybLangRuBig();
+        }
+    } else {
+        if(flagEng === true){
+            keybLangEn();
+        } else if(flagEng === false){
+            keybLangRu();
+        }
+    }
+}
+let shiftUp = () =>{
+    if(flagCl === false){
+        if(flagEng === true && flagSmall === false){
+            keybLangEn();
+        } else if(flagEng === false && flagSmall === false){
+            keybLangRu();
+        }
+    } else {
+        if(flagEng === true){
+            keybLangEnBig();
+        } else if(flagEng === false){
+            keybLangRuBig();
+        }
     }
 }
 
-(keyboardArray[0][13]).addEventListener('mousedown', () => {
-        textarea.value = (textarea.value).slice(0, -1);
-});
-(keyboardArray[1][0]).addEventListener('mousedown', () =>{
-        textarea.value += '  ';
-});
-(keyboardArray[4][3]).addEventListener('mousedown', () =>{
-    textarea.value += ' ';
-});
-(keyboardArray[2][12]).addEventListener('mousedown', () =>{
-    textarea.value += '\r\n';
+(keyboardArray[3][0]).addEventListener('mousedown', shiftDown);
+(keyboardArray[3][0]).addEventListener('mouseup', shiftUp);
+(keyboardArray[3][12]).addEventListener('mousedown', shiftDown);
+(keyboardArray[3][12]).addEventListener('mouseup', shiftUp);
+
+document.onkeydown=function(){return event.keyCode ? false : true;}
+
+document.addEventListener('keydown', (event) => {
+    console.log(event);
+    keyboardArray.forEach(elem => {
+        elem.forEach(item => {
+            if(`rows__key ${event.code}` === item.className || `rows__key ${event.key}` === item.className) {
+                item.style.opacity = 0.5;
+                item.style.borderRadius = '30%';
+                item.style.opacity = 0.5;
+                item.style.borderRadius = '30%';
+                if((item.innerHTML).length<2) {
+                    textarea.value += item.innerHTML;
+                    localStorage.setItem("str", textarea.value);
+                }  
+            }
+        });
+    });
 });
 
+document.addEventListener('keyup', (event) => {  
+    keyboardArray.forEach(elem => {
+        elem.forEach(item => {
+            if(`rows__key ${event.key}` === item.className && `rows__key ${event.key}` !== (keyboardArray[2][0]).className || `rows__key ${event.code}` === item.className && `rows__key ${event.key}` !== (keyboardArray[2][0]).className) {
+                item.style.opacity = '';
+                item.style.borderRadius = '';
+                item.style.opacity = '';
+                item.style.borderRadius = '';
+            }
+        })
+    })  
+});
+
+document.addEventListener('keydown', (e) => {
+    console.log(e);
+    if(event.key === 'Enter') {
+        textarea.value += '\r\n';
+        localStorage.setItem("str", textarea.value);
+    }
+    if(event.key === 'Backspace') {
+        textarea.value = (textarea.value).slice(0, -1);
+        localStorage.setItem("str", textarea.value);
+    }
+    if(event.code === 'Space') {
+        textarea.value += '\u0020';
+        localStorage.setItem("str", textarea.value);
+    }
+    if(e.key === "CapsLock") CapsLockOnOff();
+    if(e.key === "Tab") {
+        textarea.value += '\u0009';
+        localStorage.setItem("str", textarea.value);
+    }    
+});
