@@ -14,7 +14,6 @@ textarea.classList.add('textarea');
 root.append(textarea, keyboard);
 let resInp;
 
-
 function createDiv(nClass, n) {
     let result = [];
     for(let i=0; i<n; i++) {
@@ -27,7 +26,6 @@ function createDiv(nClass, n) {
 
 keyboard.append(...createDiv('rows', 5));
 const keyboardArr = keyboard.getElementsByClassName('rows');
-
 
 keyboardArr[0].append(...createDiv('rows__key', 14));
 keyboardArr[1].append(...createDiv('rows__key', 15));
@@ -104,7 +102,6 @@ let clNameElem = [
     ['Shift','KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash', 'ArrowUp', 'Shift'],
     ['Control','MetaLeft', 'Alt', 'Space', 'Alt', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'Control']
 ]
-
 
 let keyName = (key, name) => {
     key.forEach((elem, item) => {
